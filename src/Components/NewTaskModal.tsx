@@ -1,12 +1,41 @@
+import { useState } from "react";
 import { FiX } from "react-icons/fi";
+
+type TaskPriority = "Low" | "Medium" | "High";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  onAddTask: (task: {
+    title: string;
+    description: string;
+    priority: TaskPriority;
+    dueDate: string;
+  }) => void;
 };
 
-function NewTaskModal({ isOpen, onClose }: Props) {
+function NewTaskModal({ isOpen, onClose, onAddTask }: Props) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState<TaskPriority>("Medium");
+  const [dueDate, setDueDate] = useState("");
+
   if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    if (!title.trim() || !dueDate) {
+      alert("Please fill in the title and due date.");
+      return;
+    }
+
+    onAddTask({
+      title: title.trim(),
+      description: description.trim(),
+      priority,
+      dueDate,
+    });
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -26,6 +55,8 @@ function NewTaskModal({ isOpen, onClose }: Props) {
             <label className="text-sm text-gray-600 font-medium">Title *</label>
             <input
               type="text"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
               placeholder="Task title"
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none"
             />
@@ -35,6 +66,8 @@ function NewTaskModal({ isOpen, onClose }: Props) {
               Description
             </label>
             <textarea
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
               placeholder="Optional description"
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none resize-none h-24"
             ></textarea>
@@ -44,7 +77,13 @@ function NewTaskModal({ isOpen, onClose }: Props) {
               <label className="text-sm text-gray-600 font-medium">
                 Priority
               </label>
-              <select className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+              <select
+                value={priority}
+                onChange={(event) =>
+                  setPriority(event.target.value as TaskPriority)
+                }
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
+              >
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
@@ -56,18 +95,25 @@ function NewTaskModal({ isOpen, onClose }: Props) {
               </label>
               <input
                 type="date"
+                value={dueDate}
+                onChange={(event) => setDueDate(event.target.value)}
                 className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
               />
             </div>
           </div>
           <div className="flex justify-end gap-3 mt-4">
             <button
+              type="button"
               onClick={onClose}
               className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
             >
               Cancel
             </button>
-            <button className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
+            >
               Add Task
             </button>
           </div>

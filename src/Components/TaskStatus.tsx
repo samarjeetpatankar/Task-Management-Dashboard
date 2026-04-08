@@ -1,29 +1,54 @@
-function TaskStatus() {
+type Task = {
+  id: string;
+  title: string;
+  description: string;
+  priority: "Low" | "Medium" | "High";
+  status: "Pending" | "Completed";
+  dueDate: string;
+};
+
+type Props = {
+  tasks: Task[];
+};
+
+function TaskStatus({ tasks }: Props) {
+  const totalTasks = tasks.length;
+  const pending = tasks.filter((task) => task.status === "Pending").length;
+  const completed = tasks.filter((task) => task.status === "Completed").length;
+  const overdue = tasks.filter((task) => {
+    if (!task.dueDate) return false;
+    const due = new Date(task.dueDate);
+    if (Number.isNaN(due.getTime())) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return task.status === "Pending" && due < today;
+  }).length;
+
   const data = [
     {
       title: "Total Tasks",
-      count: 2,
+      count: totalTasks,
       border: "border-gray-300",
       text: "text-gray-800",
       bg: "bg-gray-50",
     },
     {
       title: "Pending",
-      count: 1,
+      count: pending,
       border: "border-yellow-400",
       text: "text-yellow-600",
       bg: "bg-yellow-50",
     },
     {
       title: "Completed",
-      count: 1,
+      count: completed,
       border: "border-green-400",
       text: "text-green-600",
       bg: "bg-green-50",
     },
     {
       title: "Overdue",
-      count: 1,
+      count: overdue,
       border: "border-red-400",
       text: "text-red-600",
       bg: "bg-red-50",

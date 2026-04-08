@@ -10,28 +10,12 @@ type Task = {
   dueDate: string;
 };
 
-function TaskInTableView() {
-  const [view, setView] = useState<"list" | "grid">("list");
+type Props = {
+  tasks: Task[];
+};
 
-  const tasks: Task[] = [
-    {
-      id: "1",
-      title: "Second Task",
-      description:
-        "This is the Second Task description This is the Second Task description This is the Second Task description This is the Second Task description This is the Second Task description ",
-      priority: "High",
-      status: "Pending",
-      dueDate: "25/04/2026",
-    },
-    {
-      id: "2",
-      title: "First Task",
-      description: "This is the task for the Main Flow to check",
-      priority: "Low",
-      status: "Pending",
-      dueDate: "23/04/2026",
-    },
-  ];
+function TaskInTableView({ tasks }: Props) {
+  const [view, setView] = useState<"list" | "grid">("list");
 
   const getPriorityStyle = (priority: Task["priority"]) => {
     if (priority === "High") return "bg-red-100 text-red-600";
@@ -42,6 +26,15 @@ function TaskInTableView() {
   const getStatusStyle = (status: Task["status"]) => {
     if (status === "Pending") return "bg-yellow-100 text-yellow-700";
     return "bg-green-100 text-green-700";
+  };
+
+  const formatDate = (dateString: string) => {
+    const parsed = new Date(dateString);
+    if (Number.isNaN(parsed.getTime())) return dateString;
+    const day = parsed.getDate().toString().padStart(2, "0");
+    const month = (parsed.getMonth() + 1).toString().padStart(2, "0");
+    const year = parsed.getFullYear();
+    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -60,69 +53,78 @@ function TaskInTableView() {
           </button>
           <button
             onClick={() => setView("grid")}
-            className={`p-2 rounded ${
-              view === "grid" ? "bg-gray-100" : "bg-gray-100"
-            }`}
+            className={`p-2 rounded bg-gray-100`}
           >
             <FiGrid />
           </button>
         </div>
       </div>
-      <div className="w-full overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
-        <table className="min-w-full text-sm text-left">
-          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
-            <tr>
-              <th className="px-6 py-3">Title</th>
-              <th className="px-6 py-3">Description</th>
-              <th className="px-6 py-3">Priority</th>
-              <th className="px-6 py-3">Status</th>
-              <th className="px-6 py-3">Due Date</th>
-              <th className="px-6 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {tasks.map((task) => (
-              <tr key={task.id} className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4 font-medium text-gray-800">
-                  {task.title}
-                </td>
-                <td className="px-6 py-4 text-gray-500 max-w-sm whitespace-normal break-words">
-                  {task.description}
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${getPriorityStyle(
-                      task.priority,
-                    )}`}
-                  >
-                    {task.priority}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
-                      task.status,
-                    )}`}
-                  >
-                    {task.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-gray-600">{task.dueDate}</td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex justify-end gap-3 text-gray-500">
-                    <button className="hover:text-blue-500">
-                      <FiEdit2 />
-                    </button>
-                    <button className="hover:text-red-500">
-                      <FiTrash2 />
-                    </button>
-                  </div>
-                </td>
+      {tasks.length === 0 ? (
+        <div className="w-full bg-white rounded-xl shadow border border-gray-200 p-8 text-center text-gray-600">
+          <p className="text-lg font-medium text-gray-800">No task yet</p>
+          <p className="mt-2 text-sm">
+            Add your first task using the New Task button.
+          </p>
+        </div>
+      ) : (
+        <div className="w-full overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
+          <table className="min-w-full text-sm text-left">
+            <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+              <tr>
+                <th className="px-6 py-3">Title</th>
+                <th className="px-6 py-3">Description</th>
+                <th className="px-6 py-3">Priority</th>
+                <th className="px-6 py-3">Status</th>
+                <th className="px-6 py-3">Due Date</th>
+                <th className="px-6 py-3 text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {tasks.map((task) => (
+                <tr key={task.id} className="hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-800">
+                    {task.title}
+                  </td>
+                  <td className="px-6 py-4 text-gray-500 max-w-sm whitespace-normal break-words">
+                    {task.description}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${getPriorityStyle(
+                        task.priority,
+                      )}`}
+                    >
+                      {task.priority}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
+                        task.status,
+                      )}`}
+                    >
+                      {task.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {formatDate(task.dueDate)}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex justify-end gap-3 text-gray-500">
+                      <button className="hover:text-blue-500">
+                        <FiEdit2 />
+                      </button>
+                      <button className="hover:text-red-500">
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
