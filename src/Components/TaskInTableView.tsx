@@ -17,7 +17,8 @@ function TaskInTableView() {
     {
       id: "1",
       title: "Second Task",
-      description: "This is the Second Task description",
+      description:
+        "This is the Second Task description This is the Second Task description This is the Second Task description This is the Second Task description This is the Second Task description ",
       priority: "High",
       status: "Pending",
       dueDate: "25/04/2026",
@@ -44,7 +45,7 @@ function TaskInTableView() {
   };
 
   return (
-    <div className="w-full px-4 md:px-12 py-4">
+    <div className="w-full px-4 md:px-12 py-10">
       <div className="flex items-center justify-between mb-4">
         <p className="text-gray-500 text-sm">{tasks.length} tasks</p>
 
@@ -85,7 +86,7 @@ function TaskInTableView() {
                 <td className="px-6 py-4 font-medium text-gray-800">
                   {task.title}
                 </td>
-                <td className="px-6 py-4 text-gray-500 max-w-xs truncate">
+                <td className="px-6 py-4 text-gray-500 max-w-sm whitespace-normal break-words">
                   {task.description}
                 </td>
                 <td className="px-6 py-4">
