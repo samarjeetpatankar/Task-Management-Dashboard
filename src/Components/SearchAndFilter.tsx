@@ -4,21 +4,34 @@ import { FiSearch, FiChevronDown } from "react-icons/fi";
 type TabType = "All" | "Pending" | "Completed";
 type PriorityType = "All" | "Low" | "Medium" | "High";
 
-function SearchAndFilter() {
-  const [activeTab, setActiveTab] = useState<TabType>("All");
-  const [priority, setPriority] = useState<PriorityType>("All");
+type Props = {
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
+  priorityFilter: PriorityType;
+  onPriorityChange: (priority: PriorityType) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+};
+
+function SearchAndFilter({
+  activeTab,
+  onTabChange,
+  priorityFilter,
+  onPriorityChange,
+  searchQuery,
+  onSearchChange,
+}: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("");
 
   const tabs: TabType[] = ["All", "Pending", "Completed"];
   const priorities: PriorityType[] = ["All", "Low", "Medium", "High"];
 
   const handleTabClick = (tab: TabType) => {
-    setActiveTab(tab);
+    onTabChange(tab);
   };
 
   const handlePrioritySelect = (value: PriorityType) => {
-    setPriority(value);
+    onPriorityChange(value);
     setIsDropdownOpen(false);
   };
 
@@ -30,8 +43,8 @@ function SearchAndFilter() {
           <input
             type="text"
             placeholder="Search tasks..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400"
           />
         </div>
@@ -61,7 +74,7 @@ function SearchAndFilter() {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-md bg-white text-sm text-gray-700 hover:bg-gray-50"
             >
-              {priority} Priorities
+              {priorityFilter} Priorities
               <FiChevronDown className="text-gray-500" />
             </button>
 

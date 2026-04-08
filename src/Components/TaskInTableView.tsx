@@ -12,10 +12,13 @@ type Task = {
 
 type Props = {
   tasks: Task[];
+  onEditTask: (task: Task) => void;
+  onDeleteTask: (taskId: string) => void;
 };
 
-function TaskInTableView({ tasks }: Props) {
+function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
   const [view, setView] = useState<"list" | "grid">("list");
+  const [deleteConfirmTask, setDeleteConfirmTask] = useState<Task | null>(null);
 
   const getPriorityStyle = (priority: Task["priority"]) => {
     if (priority === "High") return "bg-red-100 text-red-600";
@@ -35,6 +38,37 @@ function TaskInTableView({ tasks }: Props) {
     const month = (parsed.getMonth() + 1).toString().padStart(2, "0");
     const year = parsed.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+
+  const isOverdue = (dueDate: string, status: Task["status"]) => {
+    if (status === "Completed") return false;
+    const due = new Date(dueDate);
+    if (Number.isNaN(due.getTime())) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return due < today;
+  };
+
+  const getTaskRowStyle = (task: Task) => {
+    if (task.status === "Completed") {
+      return "opacity-60 line-through";
+    }
+    return "";
+  };
+
+  const handleDeleteClick = (task: Task) => {
+    setDeleteConfirmTask(task);
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmTask) {
+      onDeleteTask(deleteConfirmTask.id);
+      setDeleteConfirmTask(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmTask(null);
   };
 
   return (
@@ -81,7 +115,10 @@ function TaskInTableView({ tasks }: Props) {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {tasks.map((task) => (
-                <tr key={task.id} className="hover:bg-gray-50 transition">
+                <tr
+                  key={task.id}
+                  className={`hover:bg-gray-50 transition ${getTaskRowStyle(task)}`}
+                >
                   <td className="px-6 py-4 font-medium text-gray-800">
                     {task.title}
                   </td>
@@ -107,14 +144,29 @@ function TaskInTableView({ tasks }: Props) {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-600">
-                    {formatDate(task.dueDate)}
+                    <div>
+                      {formatDate(task.dueDate)}
+                      {isOverdue(task.dueDate, task.status) && (
+                        <div className="text-xs text-red-500 mt-1">
+                          Due Date
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-3 text-gray-500">
-                      <button className="hover:text-blue-500">
-                        <FiEdit2 />
-                      </button>
-                      <button className="hover:text-red-500">
+                      {task.status !== "Completed" && (
+                        <button
+                          onClick={() => onEditTask(task)}
+                          className="hover:text-blue-500"
+                        >
+                          <FiEdit2 />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDeleteClick(task)}
+                        className="hover:text-red-500"
+                      >
                         <FiTrash2 />
                       </button>
                     </div>
@@ -123,6 +175,39 @@ function TaskInTableView({ tasks }: Props) {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmTask && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={cancelDelete}
+          />
+          <div className="relative bg-white w-[90%] max-w-sm rounded-2xl shadow-xl p-6 z-10">
+            <div className="text-center">
+              <h2 className="text-lg font-semibold mb-2">Delete Task</h2>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete "{deleteConfirmTask.title}"?
+                This action cannot be undone.
+              </p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={cancelDelete}
+                  className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
