@@ -4,6 +4,10 @@ A responsive task management dashboard built with React, TypeScript, Vite, and T
 
 The app lets you create, edit, delete, search, filter, and reorder tasks in a polished dashboard interface.
 
+## 🌐 Live Demo
+
+**Live Demo:**    https://task-management-dashboard-samarjeet.vercel.app/
+
 ---
 
 ## 🚀 Features
