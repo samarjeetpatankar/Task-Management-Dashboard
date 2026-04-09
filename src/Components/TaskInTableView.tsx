@@ -1,5 +1,5 @@
 import { FiEdit2, FiTrash2, FiList, FiGrid } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Task = {
   id: string;
@@ -14,11 +14,99 @@ type Props = {
   tasks: Task[];
   onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
+  onReorderTasks?: (reorderedTasks: Task[]) => void;
 };
 
-function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
+function TaskInTableView({
+  tasks,
+  onEditTask,
+  onDeleteTask,
+  onReorderTasks,
+}: Props) {
   const [view, setView] = useState<"list" | "grid">("list");
   const [deleteConfirmTask, setDeleteConfirmTask] = useState<Task | null>(null);
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [dragOverTaskId, setDragOverTaskId] = useState<string | null>(null);
+
+  const STORAGE_KEY = "taskOrder";
+
+  const getStoredTasks = () => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const storedIds = JSON.parse(stored) as string[];
+        const storedOrderMap = new Map(
+          storedIds.map((id, index) => [id, index]),
+        );
+        return [...tasks].sort((a, b) => {
+          const aIndex = storedOrderMap.get(a.id) ?? Infinity;
+          const bIndex = storedOrderMap.get(b.id) ?? Infinity;
+          return aIndex - bIndex;
+        });
+      }
+    } catch (error) {
+      console.error("Error reading from localStorage:", error);
+    }
+    return tasks;
+  };
+
+  const [orderedTasks, setOrderedTasks] = useState<Task[]>(getStoredTasks());
+
+  useEffect(() => {
+    setOrderedTasks(getStoredTasks());
+  }, [tasks]);
+
+  const handleDragStart = (taskId: string) => {
+    setDraggedTaskId(taskId);
+  };
+
+  const handleDragOver = (e: React.DragEvent, taskId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverTaskId(taskId);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverTaskId(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetTaskId: string) => {
+    e.preventDefault();
+
+    if (!draggedTaskId || draggedTaskId === targetTaskId) {
+      setDraggedTaskId(null);
+      setDragOverTaskId(null);
+      return;
+    }
+
+    const draggedIndex = orderedTasks.findIndex((t) => t.id === draggedTaskId);
+    const targetIndex = orderedTasks.findIndex((t) => t.id === targetTaskId);
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    const updatedTasks = [...orderedTasks];
+    const [draggedTask] = updatedTasks.splice(draggedIndex, 1);
+    updatedTasks.splice(targetIndex, 0, draggedTask);
+
+    setOrderedTasks(updatedTasks);
+
+    // Save to localStorage
+    try {
+      const taskIds = updatedTasks.map((task) => task.id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(taskIds));
+    } catch (error) {
+      console.error("Error saving to localStorage:", error);
+    }
+
+    onReorderTasks?.(updatedTasks);
+    setDraggedTaskId(null);
+    setDragOverTaskId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTaskId(null);
+    setDragOverTaskId(null);
+  };
 
   const getPriorityStyle = (priority: Task["priority"]) => {
     if (priority === "High") return "bg-red-100 text-red-600";
@@ -126,10 +214,22 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {tasks.map((task) => (
+              {orderedTasks.map((task) => (
                 <tr
                   key={task.id}
-                  className={`hover:bg-gray-50 transition ${getTaskRowStyle(task)}`}
+                  draggable
+                  onDragStart={() => handleDragStart(task.id)}
+                  onDragOver={(e) => handleDragOver(e, task.id)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, task.id)}
+                  onDragEnd={handleDragEnd}
+                  className={`transition duration-200 cursor-move ${
+                    draggedTaskId === task.id
+                      ? "opacity-50 bg-blue-50"
+                      : dragOverTaskId === task.id
+                        ? "bg-blue-100 shadow-md"
+                        : "hover:bg-gray-50"
+                  } ${getTaskRowStyle(task)}`}
                 >
                   <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 font-medium text-gray-800 text-xs sm:text-sm max-w-[15%] sm:max-w-[20%] md:max-w-[25%] lg:max-w-[30%] xl:max-w-xs truncate">
                     {task.title}
@@ -184,10 +284,22 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
         </div>
       ) : (
         <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
-          {tasks.map((task) => (
+          {orderedTasks.map((task) => (
             <div
               key={task.id}
-              className={`overflow-hidden rounded-2xl sm:rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+              draggable
+              onDragStart={() => handleDragStart(task.id)}
+              onDragOver={(e) => handleDragOver(e, task.id)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, task.id)}
+              onDragEnd={handleDragEnd}
+              className={`overflow-hidden rounded-2xl sm:rounded-3xl border-2 transition-all duration-200 bg-white cursor-move ${
+                draggedTaskId === task.id
+                  ? "opacity-50 scale-95 border-blue-400 shadow-lg shadow-blue-200"
+                  : dragOverTaskId === task.id
+                    ? "border-blue-400 shadow-lg shadow-blue-300 -translate-y-1"
+                    : "border-gray-200 shadow-sm hover:-translate-y-0.5 hover:shadow-md"
+              } ${
                 task.status === "Completed" ? "opacity-60 line-through" : ""
               }`}
             >
