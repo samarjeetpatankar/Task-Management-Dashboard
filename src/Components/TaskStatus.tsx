@@ -15,14 +15,6 @@ function TaskStatus({ tasks }: Props) {
   const totalTasks = tasks.length;
   const pending = tasks.filter((task) => task.status === "Pending").length;
   const completed = tasks.filter((task) => task.status === "Completed").length;
-  const overdue = tasks.filter((task) => {
-    if (!task.dueDate) return false;
-    const due = new Date(task.dueDate);
-    if (Number.isNaN(due.getTime())) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return task.status === "Pending" && due < today;
-  }).length;
 
   const data = [
     {
@@ -46,18 +38,11 @@ function TaskStatus({ tasks }: Props) {
       text: "text-green-600",
       bg: "bg-green-50",
     },
-    {
-      title: "Overdue",
-      count: overdue,
-      border: "border-red-400",
-      text: "text-red-600",
-      bg: "bg-red-50",
-    },
   ];
 
   return (
     <div className="px-4 md:px-12 py-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((item, index) => (
           <div
             key={index}

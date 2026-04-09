@@ -40,15 +40,6 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
     return `${day}/${month}/${year}`;
   };
 
-  const isOverdue = (dueDate: string, status: Task["status"]) => {
-    if (status === "Completed") return false;
-    const due = new Date(dueDate);
-    if (Number.isNaN(due.getTime())) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return due < today;
-  };
-
   const getTaskRowStyle = (task: Task) => {
     if (task.status === "Completed") {
       return "opacity-60 line-through";
@@ -144,14 +135,7 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-600">
-                    <div>
-                      {formatDate(task.dueDate)}
-                      {isOverdue(task.dueDate, task.status) && (
-                        <div className="text-xs text-red-500 mt-1">
-                          Due Date
-                        </div>
-                      )}
-                    </div>
+                    <div>{formatDate(task.dueDate)}</div>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-3 text-gray-500">

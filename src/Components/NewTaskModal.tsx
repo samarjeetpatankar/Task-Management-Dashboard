@@ -122,7 +122,7 @@ function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }:
             ></textarea>
           </div>
           <div className="flex gap-3">
-            <div className="w-1/2">
+            <div className={editingTask ? "w-1/2" : "w-full"}>
               <label className="text-sm text-gray-600 font-medium">
                 Priority
               </label>
@@ -138,21 +138,23 @@ function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }:
                 <option>High</option>
               </select>
             </div>
-            <div className="w-1/2">
-              <label className="text-sm text-gray-600 font-medium">
-                Status
-              </label>
-              <select
-                value={status}
-                onChange={(event) =>
-                  setStatus(event.target.value as TaskStatus)
-                }
-                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
-              >
-                <option>Pending</option>
-                <option>Completed</option>
-              </select>
-            </div>
+            {editingTask && (
+              <div className="w-1/2">
+                <label className="text-sm text-gray-600 font-medium">
+                  Status
+                </label>
+                <select
+                  value={status}
+                  onChange={(event) =>
+                    setStatus(event.target.value as TaskStatus)
+                  }
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
+                >
+                  <option>Pending</option>
+                  <option>Completed</option>
+                </select>
+              </div>
+            )}
           </div>
           <div>
             <label className="text-sm text-gray-600 font-medium">
