@@ -19,7 +19,7 @@ function Navbar({ onOpenModal }: Props) {
           className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 cursor-pointer text-white font-medium transition"
         >
           <FaPlus className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">New Task</span>
+          <p className="hidden sm:inline text-base">New Task</p>
         </button>
       </div>
     </div>

@@ -36,7 +36,7 @@ function SearchAndFilter({
   };
 
   return (
-    <div className="w-full px-2 py-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 sm:py-3 md:py-4 bg-white">
+    <div className="w-full px-2 py-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 sm:py-3 md:py-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 sm:gap-4">
         <div className="relative w-full sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-[60%]">
           <FiSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:left-3" />
@@ -45,12 +45,12 @@ function SearchAndFilter({
             placeholder="Search tasks..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-8 pr-2 py-2 sm:pl-10 sm:pr-4 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+            className="w-full pl-8 pr-2 py-2 sm:pl-10 sm:pr-4 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300  bg-white"
           />
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-          <div className="flex bg-gray-100 rounded-md overflow-hidden">
+          <div className="flex bg-white rounded-md overflow-hidden border border-gray-200">
             {tabs.map((tab) => {
               let isActive = activeTab === tab;
 
