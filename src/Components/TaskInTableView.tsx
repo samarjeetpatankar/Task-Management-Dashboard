@@ -67,18 +67,24 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
       <div className="flex items-center justify-between mb-4">
         <p className="text-gray-500 text-sm">{tasks.length} tasks</p>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center rounded-full border border-gray-200 overflow-hidden">
           <button
             onClick={() => setView("list")}
-            className={`p-2 rounded ${
-              view === "list" ? "bg-red-500 text-white" : "bg-gray-100"
-            }`}
+            className={`w-11 h-11 flex items-center justify-center ${
+              view === "list"
+                ? "bg-red-500 text-white"
+                : "bg-white text-gray-500 hover:bg-gray-50"
+            } rounded-l-full`}
           >
             <FiList />
           </button>
           <button
             onClick={() => setView("grid")}
-            className={`p-2 rounded bg-gray-100`}
+            className={`w-11 h-11 flex items-center justify-center ${
+              view === "grid"
+                ? "bg-red-500 text-white"
+                : "bg-white text-gray-500 hover:bg-gray-50"
+            } rounded-r-full`}
           >
             <FiGrid />
           </button>
