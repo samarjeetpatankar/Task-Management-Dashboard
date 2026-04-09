@@ -47,6 +47,12 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
     return "";
   };
 
+  const getCardHeaderColor = (task: Task) => {
+    if (task.priority === "High") return "bg-red-500";
+    if (task.priority === "Medium") return "bg-yellow-500";
+    return "bg-green-500";
+  };
+
   const handleDeleteClick = (task: Task) => {
     setDeleteConfirmTask(task);
   };
@@ -97,7 +103,7 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
             Add your first task using the New Task button.
           </p>
         </div>
-      ) : (
+      ) : view === "list" ? (
         <div className="w-full overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
           <table className="min-w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
@@ -165,6 +171,71 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
               ))}
             </tbody>
           </table>
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {tasks.map((task) => (
+            <div
+              key={task.id}
+              className={`overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                task.status === "Completed" ? "opacity-80" : ""
+              }`}
+            >
+              <div className={`${getCardHeaderColor(task)} h-1 w-full`} />
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        {task.title}
+                      </h3>
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${getStatusStyle(
+                          task.status,
+                        )}`}
+                      >
+                        {task.status}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-gray-600 min-h-[3rem]">
+                      {task.description || "No description provided."}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end gap-2 text-gray-500">
+                    {task.status !== "Completed" && (
+                      <button
+                        onClick={() => onEditTask(task)}
+                        className="rounded-full p-2 text-gray-500 hover:bg-gray-100"
+                        aria-label="Edit task"
+                      >
+                        <FiEdit2 />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDeleteClick(task)}
+                      className="rounded-full p-2 text-gray-500 hover:bg-gray-100"
+                      aria-label="Delete task"
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4">
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${getPriorityStyle(
+                      task.priority,
+                    )}`}
+                  >
+                    {task.priority}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {formatDate(task.dueDate)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
