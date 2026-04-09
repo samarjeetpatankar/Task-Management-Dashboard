@@ -72,37 +72,39 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
   };
 
   return (
-    <div className="w-full px-4 md:px-12 py-10">
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-gray-500 text-sm">{tasks.length} tasks</p>
+    <div className="w-full px-2 py-4 sm:px-4 md:px-6 lg:px-8 xl:px-12 sm:py-6 md:py-8 lg:py-10">
+      <div className="flex items-center justify-between mb-2 sm:mb-4">
+        <p className="text-gray-500 text-xs sm:text-sm">{tasks.length} tasks</p>
 
         <div className="flex items-center rounded-full border border-gray-200 overflow-hidden">
           <button
             onClick={() => setView("list")}
-            className={`w-11 h-11 flex items-center justify-center ${
+            className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 flex items-center justify-center ${
               view === "list"
                 ? "bg-red-500 text-white"
                 : "bg-white text-gray-500 hover:bg-gray-50"
             } rounded-l-full`}
           >
-            <FiList />
+            <FiList className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={() => setView("grid")}
-            className={`w-11 h-11 flex items-center justify-center ${
+            className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 flex items-center justify-center ${
               view === "grid"
                 ? "bg-red-500 text-white"
                 : "bg-white text-gray-500 hover:bg-gray-50"
             } rounded-r-full`}
           >
-            <FiGrid />
+            <FiGrid className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
       {tasks.length === 0 ? (
-        <div className="w-full bg-white rounded-xl shadow border border-gray-200 p-8 text-center text-gray-600">
-          <p className="text-lg font-medium text-gray-800">No task yet</p>
-          <p className="mt-2 text-sm">
+        <div className="w-full bg-white rounded-xl shadow border border-gray-200 p-4 sm:p-6 md:p-8 text-center text-gray-600">
+          <p className="text-base sm:text-lg font-medium text-gray-800">
+            No task yet
+          </p>
+          <p className="mt-2 text-xs sm:text-sm">
             Add your first task using the New Task button.
           </p>
         </div>
@@ -111,12 +113,16 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
           <table className="min-w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
-                <th className="px-6 py-3">Title</th>
-                <th className="px-6 py-3">Description</th>
-                <th className="px-6 py-3">Priority</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Due Date</th>
-                <th className="px-6 py-3 text-right">Actions</th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">Title</th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">
+                  Description
+                </th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">Priority</th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">Status</th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">Due Date</th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -125,35 +131,36 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
                   key={task.id}
                   className={`hover:bg-gray-50 transition ${getTaskRowStyle(task)}`}
                 >
-                  <td className="px-6 py-4 font-medium text-gray-800">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 font-medium text-gray-800 text-xs sm:text-sm max-w-[15%] sm:max-w-[20%] md:max-w-[25%] lg:max-w-[30%] xl:max-w-xs truncate">
                     {task.title}
                   </td>
-                  <td className="px-6 py-4 text-gray-500 max-w-sm whitespace-normal break-words">
-                    {truncateText(task.description) || "No description provided."}
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 text-gray-500 max-w-[25%] sm:max-w-[30%] md:max-w-[35%] lg:max-w-[40%] xl:max-w-sm whitespace-normal break-words text-xs sm:text-sm">
+                    {truncateText(task.description) ||
+                      "No description provided."}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getPriorityStyle(
+                      className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-medium ${getPriorityStyle(
                         task.priority,
                       )}`}
                     >
                       {task.priority}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
+                      className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-medium ${getStatusStyle(
                         task.status,
                       )}`}
                     >
                       {task.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-gray-600">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 text-gray-600 text-xs sm:text-sm">
                     <div>{formatDate(task.dueDate)}</div>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-3 text-gray-500">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 text-right">
+                    <div className="flex justify-end gap-2 sm:gap-3 text-gray-500">
                       {task.status !== "Completed" && (
                         <button
                           onClick={() => onEditTask(task)}
@@ -176,63 +183,66 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
           </table>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
           {tasks.map((task) => (
             <div
               key={task.id}
-              className={`overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+              className={`overflow-hidden rounded-2xl sm:rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                 task.status === "Completed" ? "opacity-60 line-through" : ""
               }`}
             >
-              <div className={`${getCardHeaderColor(task)} h-1 w-full`} />
-              <div className="p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+              <div
+                className={`${getCardHeaderColor(task)} h-0.5 sm:h-1 w-full`}
+              />
+              <div className="p-3 sm:p-4 md:p-5">
+                <div className="flex items-start justify-between gap-2 sm:gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+                      <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 truncate w-full">
                         {task.title}
                       </h3>
                       <span
-                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${getStatusStyle(
+                        className={`rounded-full px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide ${getStatusStyle(
                           task.status,
                         )}`}
                       >
                         {task.status}
                       </span>
                     </div>
-                    <p className="mt-3 text-sm leading-6 text-gray-600 min-h-[3rem]">
-                      {truncateText(task.description) || "No description provided."}
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-5 sm:leading-6 text-gray-600 min-h-[2rem] sm:min-h-[3rem] line-clamp-3">
+                      {truncateText(task.description, 100) ||
+                        "No description provided."}
                     </p>
                   </div>
-                  <div className="flex flex-col items-end gap-2 text-gray-500">
+                  <div className="flex flex-col items-end gap-1 sm:gap-2 text-gray-500">
                     {task.status !== "Completed" && (
                       <button
                         onClick={() => onEditTask(task)}
-                        className="rounded-full p-2 text-gray-500 hover:bg-gray-100"
+                        className="rounded-full p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100"
                         aria-label="Edit task"
                       >
-                        <FiEdit2 />
+                        <FiEdit2 className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     )}
                     <button
                       onClick={() => handleDeleteClick(task)}
-                      className="rounded-full p-2 text-gray-500 hover:bg-gray-100"
+                      className="rounded-full p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100"
                       aria-label="Delete task"
                     >
-                      <FiTrash2 />
+                      <FiTrash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4">
+                <div className="mt-3 sm:mt-4 md:mt-5 flex flex-wrap items-center justify-between gap-2 sm:gap-3 border-t border-gray-100 pt-3 sm:pt-4">
                   <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${getPriorityStyle(
+                    className={`inline-flex items-center rounded-full px-2 py-0.5 sm:px-3 sm:py-1 text-xs font-semibold ${getPriorityStyle(
                       task.priority,
                     )}`}
                   >
                     {task.priority}
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-xs sm:text-sm text-gray-500">
                     {formatDate(task.dueDate)}
                   </span>
                 </div>
@@ -244,28 +254,30 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmTask && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           <div
             className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={cancelDelete}
           />
-          <div className="relative bg-white w-[90%] max-w-sm rounded-2xl shadow-xl p-6 z-10">
+          <div className="relative bg-white w-full max-w-xs sm:max-w-sm rounded-2xl shadow-xl p-4 sm:p-6 z-10">
             <div className="text-center">
-              <h2 className="text-lg font-semibold mb-2">Delete Task</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-base sm:text-lg font-semibold mb-2">
+                Delete Task
+              </h2>
+              <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
                 Are you sure you want to delete "{deleteConfirmTask.title}"?
                 This action cannot be undone.
               </p>
-              <div className="flex justify-center gap-3">
+              <div className="flex justify-center gap-2 sm:gap-3">
                 <button
                   onClick={cancelDelete}
-                  className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm sm:text-base"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium text-sm sm:text-base"
                 >
                   Delete
                 </button>

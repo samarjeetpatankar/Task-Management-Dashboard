@@ -7,9 +7,12 @@ type Props = {
 
 function Navbar({ onOpenModal }: Props) {
   return (
-    <div className="flex items-center justify-between px-14 py-3">
-      <img src={logo} alt="Logo" className="w-[250px] h-auto" />
-
+    <div className="flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 md:px-8 lg:px-10 xl:px-14 xl:py-3">
+      <img
+        src={logo}
+        alt="Logo"
+        className="w-32 h-auto sm:w-40 md:w-48 lg:w-56 xl:w-[250px]"
+      />
       <div className="flex items-center gap-2">
         <button
           onClick={onOpenModal}
