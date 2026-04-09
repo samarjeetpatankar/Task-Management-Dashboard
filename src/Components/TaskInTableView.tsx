@@ -40,6 +40,9 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
     return `${day}/${month}/${year}`;
   };
 
+  const truncateText = (text: string, maxLength = 160) =>
+    text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+
   const getTaskRowStyle = (task: Task) => {
     if (task.status === "Completed") {
       return "opacity-60 line-through";
@@ -126,7 +129,7 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
                     {task.title}
                   </td>
                   <td className="px-6 py-4 text-gray-500 max-w-sm whitespace-normal break-words">
-                    {task.description}
+                    {truncateText(task.description) || "No description provided."}
                   </td>
                   <td className="px-6 py-4">
                     <span
@@ -178,7 +181,7 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
             <div
               key={task.id}
               className={`overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-                task.status === "Completed" ? "opacity-80" : ""
+                task.status === "Completed" ? "opacity-60 line-through" : ""
               }`}
             >
               <div className={`${getCardHeaderColor(task)} h-1 w-full`} />
@@ -198,7 +201,7 @@ function TaskInTableView({ tasks, onEditTask, onDeleteTask }: Props) {
                       </span>
                     </div>
                     <p className="mt-3 text-sm leading-6 text-gray-600 min-h-[3rem]">
-                      {task.description || "No description provided."}
+                      {truncateText(task.description) || "No description provided."}
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-2 text-gray-500">
