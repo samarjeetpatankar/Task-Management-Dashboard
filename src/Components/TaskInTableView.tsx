@@ -309,39 +309,41 @@ function TaskInTableView({
               <div className="p-3 sm:p-4 md:p-5">
                 <div className="flex items-start justify-between gap-2 sm:gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                      <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 truncate w-full">
+                    <div className="flex flex-col gap-1 sm:gap-2 w-full">
+                      <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-900 truncate overflow-hidden text-ellipsis block">
                         {task.title}
                       </h3>
-                      <span
-                        className={`rounded-full px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide ${getStatusStyle(
-                          task.status,
-                        )}`}
-                      >
-                        {task.status}
-                      </span>
+                      <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                        <span
+                          className={`rounded-full px-1 py-0.5 sm:px-1.5 sm:py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide ${getStatusStyle(
+                            task.status,
+                          )}`}
+                        >
+                          {task.status}
+                        </span>
+                      </div>
                     </div>
-                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-5 sm:leading-6 text-gray-600 min-h-[2rem] sm:min-h-[3rem] line-clamp-3">
-                      {truncateText(task.description, 100) ||
+                    <p className="text-xs sm:text-sm leading-4 sm:leading-5 text-gray-600 line-clamp-2 sm:line-clamp-3 w-full overflow-hidden text-ellipsis">
+                      {truncateText(task.description, 80) ||
                         "No description provided."}
                     </p>
                   </div>
-                  <div className="flex flex-col items-end gap-1 sm:gap-2 text-gray-500">
+                  <div className="flex flex-col items-end gap-1 sm:gap-1.5 text-gray-500">
                     {task.status !== "Completed" && (
                       <button
                         onClick={() => onEditTask(task)}
-                        className="rounded-full p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100"
+                        className="rounded-full p-1 sm:p-1.5 text-gray-500 hover:bg-gray-100 transition"
                         aria-label="Edit task"
                       >
-                        <FiEdit2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <FiEdit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
                     )}
                     <button
                       onClick={() => handleDeleteClick(task)}
-                      className="rounded-full p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100"
+                      className="rounded-full p-1 sm:p-1.5 text-gray-500 hover:bg-gray-100 transition"
                       aria-label="Delete task"
                     >
-                      <FiTrash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <FiTrash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </button>
                   </div>
                 </div>
