@@ -198,11 +198,13 @@ function TaskInTableView({
         </div>
       ) : view === "list" ? (
         <div className="w-full overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
-          <table className="min-w-full text-sm text-left">
+          <table className="min-w-[820px] md:min-w-full w-full md:table-auto table-fixed text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">Title</th>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">
+                <th className="w-44 sm:w-52 md:w-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6">
+                  Title
+                </th>
+                <th className="w-64 sm:w-72 md:w-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6">
                   Description
                 </th>
                 <th className="px-2 py-2 sm:px-4 sm:py-3 md:px-6">Priority</th>
@@ -231,10 +233,10 @@ function TaskInTableView({
                         : "hover:bg-gray-50"
                   } ${getTaskRowStyle(task)}`}
                 >
-                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 font-medium text-gray-800 text-xs sm:text-sm max-w-[15%] sm:max-w-[20%] md:max-w-[25%] lg:max-w-[30%] xl:max-w-xs truncate">
+                  <td className="w-44 sm:w-52 md:w-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6 font-medium text-gray-800 text-xs sm:text-sm truncate">
                     {task.title}
                   </td>
-                  <td className="px-2 py-2 sm:px-4 sm:py-3 md:px-6 text-gray-500 max-w-[25%] sm:max-w-[30%] md:max-w-[35%] lg:max-w-[40%] xl:max-w-sm whitespace-normal break-words text-xs sm:text-sm">
+                  <td className="w-64 sm:w-72 md:w-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6 text-gray-500 whitespace-normal break-words text-xs sm:text-sm">
                     {truncateText(task.description) ||
                       "No description provided."}
                   </td>
