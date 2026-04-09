@@ -75,17 +75,21 @@ npm run preview
 
 ## 📸 Screenshots
 
-> Replace these placeholders with actual screenshots from the app.
+### Dashboard Overview
 
-![Dashboard Overview](./public/screenshot-dashboard.png)
+![Dashboard Overview](./public/screenshot-dashboard.png "Dashboard Overview")
 
-![Task Modal](./public/screenshot-modal.png)
+### Task Modal
 
-![Search and Filters](./public/screenshot-filters.png)
+![Task Modal](./public/screenshot-modal.png "Task Modal")
 
-![Card View](./public/screenshot-card-view.png)
+### Search and Filters
 
-If you want, add real screenshot files in the `public/` folder and update the image paths above.
+![Search and Filters](./public/screenshot-filters.png "Search and Filters")
+
+### Card View
+
+![Card View](./public/screenshot-card-view.png "Card View")
 
 ---
 
