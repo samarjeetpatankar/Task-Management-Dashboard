@@ -26,12 +26,22 @@ type Props = {
   editingTask: Task | null;
 };
 
-function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }: Props) {
+function NewTaskModal({
+  isOpen,
+  onClose,
+  onAddTask,
+  onUpdateTask,
+  editingTask,
+}: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<TaskPriority>("Medium");
   const [status, setStatus] = useState<TaskStatus>("Pending");
   const [dueDate, setDueDate] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [titleCount, setTitleCount] = useState(0);
+  const [descriptionCount, setDescriptionCount] = useState(0);
 
   useEffect(() => {
     if (editingTask) {
@@ -40,12 +50,28 @@ function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }:
       setPriority(editingTask.priority);
       setStatus(editingTask.status);
       setDueDate(editingTask.dueDate);
+      setTitleCount(editingTask.title.length);
+      setDescriptionCount(editingTask.description.length);
+      setTitleError(
+        editingTask.title.length > 60
+          ? "Title cannot exceed 60 characters."
+          : "",
+      );
+      setDescriptionError(
+        editingTask.description.length > 200
+          ? "Description cannot exceed 200 characters."
+          : "",
+      );
     } else {
       setTitle("");
       setDescription("");
       setPriority("Medium");
       setStatus("Pending");
       setDueDate("");
+      setTitleCount(0);
+      setDescriptionCount(0);
+      setTitleError("");
+      setDescriptionError("");
     }
   }, [editingTask, isOpen]);
 
@@ -54,6 +80,10 @@ function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }:
   const handleSubmit = () => {
     if (!title.trim() || !dueDate) {
       alert("Please fill in the title and due date.");
+      return;
+    }
+
+    if (title.length > 60 || description.length > 200) {
       return;
     }
 
@@ -81,6 +111,10 @@ function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }:
     setPriority("Medium");
     setStatus("Pending");
     setDueDate("");
+    setTitleCount(0);
+    setDescriptionCount(0);
+    setTitleError("");
+    setDescriptionError("");
     onClose();
   };
 
@@ -102,24 +136,58 @@ function NewTaskModal({ isOpen, onClose, onAddTask, onUpdateTask, editingTask }:
         <div className="flex flex-col gap-4">
           <div>
             <label className="text-sm text-gray-600 font-medium">Title *</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              placeholder="Task title"
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={title}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setTitle(value);
+                  setTitleCount(value.length);
+                  setTitleError(
+                    value.length > 60
+                      ? "Title cannot exceed 60 characters."
+                      : "",
+                  );
+                }}
+                placeholder="Task title"
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none pr-12"
+              />
+              <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                {titleCount}/60
+              </div>
+            </div>
+            {titleError && (
+              <p className="text-red-500 text-xs mt-1">{titleError}</p>
+            )}
           </div>
           <div>
             <label className="text-sm text-gray-600 font-medium">
               Description
             </label>
-            <textarea
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              placeholder="Optional description"
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none resize-none h-24"
-            ></textarea>
+            <div className="relative">
+              <textarea
+                value={description}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setDescription(value);
+                  setDescriptionCount(value.length);
+                  setDescriptionError(
+                    value.length > 200
+                      ? "Description cannot exceed 200 characters."
+                      : "",
+                  );
+                }}
+                placeholder="Optional description"
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none resize-none h-24 pr-12"
+              ></textarea>
+              <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                {descriptionCount}/200
+              </div>
+            </div>
+            {descriptionError && (
+              <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+            )}
           </div>
           <div className="flex gap-3">
             <div className={editingTask ? "w-1/2" : "w-full"}>
