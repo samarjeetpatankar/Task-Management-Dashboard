@@ -1,75 +1,116 @@
-# React + TypeScript + Vite
+# Task Management Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive task management dashboard built with React, TypeScript, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+The app lets you create, edit, delete, search, filter, and reorder tasks in a polished dashboard interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Add new tasks with title, description, priority, and due date
+- Edit existing tasks, including status updates for completed tasks
+- Delete tasks with a confirmation flow
+- Search tasks by title or description
+- Filter tasks by status (`All`, `Pending`, `Completed`)
+- Filter tasks by priority (`All`, `Low`, `Medium`, `High`)
+- Toggle between list and grid views
+- Drag-and-drop reorder tasks with persistent ordering via `localStorage`
+- Task summary cards showing total, pending, and completed counts
+- Responsive layout for desktop and mobile
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## 📁 Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/App.tsx` — main app state and logic
+- `src/Components/Navbar.tsx` — top navigation and add-task button
+- `src/Components/NewTaskModal.tsx` — modal form for creating or editing tasks
+- `src/Components/SearchAndFilter.tsx` — search input, status tabs, and priority filter dropdown
+- `src/Components/TaskInTableView.tsx` — list/grid views, drag-and-drop reorder, actions
+- `src/Components/TaskStatus.tsx` — dashboard summary cards
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Setup Instructions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Start the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+3. Open the local URL shown in the terminal (usually `http://localhost:5173`).
+
+4. Build the project for production:
+
+```bash
+npm run build
+```
+
+5. Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
+## 🎨 Design Decisions
+
+- **LocalStorage persistence:** Tasks and task order are saved in the browser so data remains after refresh without needing a backend.
+- **Modal UI for task entry:** A single modal supports both create and edit flows, keeping the UX consistent.
+- **List and grid toggle:** Users can choose a compact table view or a card-based grid view for better readability.
+- **Filtering & search:** Combined status tabs, priority dropdown, and search input make task discovery fast.
+- **Validation hints:** Title and description character counters and validation help prevent bad input.
+- **Tailwind CSS:** Tailwind enables a clean responsive interface with minimal custom CSS.
+
+---
+
+## 📸 Screenshots
+
+> Replace these placeholders with actual screenshots from the app.
+
+![Dashboard Overview](./public/screenshot-dashboard.png)
+
+![Task Modal](./public/screenshot-modal.png)
+
+![Search and Filters](./public/screenshot-filters.png)
+
+![Card View](./public/screenshot-card-view.png)
+
+If you want, add real screenshot files in the `public/` folder and update the image paths above.
+
+---
+
+## 📦 Dependencies
+
+- `react`
+- `react-dom`
+- `react-icons`
+- `tailwindcss`
+- `@vitejs/plugin-react`
+
+Dev dependencies include TypeScript, ESLint, Vite, and supporting TypeScript type packages.
+
+---
+
+## ✅ Notes
+
+- Task state is initialized from `localStorage` using the key `task_management_tasks`.
+- Drag-and-drop order is persisted using the key `taskOrder`.
+- The task modal requires a title and due date before submission.
+
+---
+
+## 📌 Getting Started
+
+Once installed, use the New Task button to add tasks, then use the filter controls to narrow results, or switch views to see tasks in different layouts.
+
+Enjoy managing tasks with this dashboard!
